@@ -10,7 +10,7 @@ import {
   TextInput,
 } from "@strapi/design-system";
 
-export default function PropertyModal({ setShowModal, addPropertyKeyValue }) {
+export default function PropertyModal({ setShowModal, addProperty }) {
   const [name, setName] = useState("");
 
   const handleSubmit = async (e) => {
@@ -19,7 +19,7 @@ export default function PropertyModal({ setShowModal, addPropertyKeyValue }) {
     e.stopPropagation();
 
     try {
-      await addPropertyKeyValue({ name: name });
+      await addProperty({ name: name });
       setShowModal(false);
     } catch (e) {
       console.log("error", e);
@@ -67,7 +67,7 @@ export default function PropertyModal({ setShowModal, addPropertyKeyValue }) {
             Cancel
           </Button>
         }
-        endActions={<Button type="submit">Add todo</Button>}
+        endActions={<Button type="submit">Add Property</Button>}
       />
     </ModalLayout>
   );

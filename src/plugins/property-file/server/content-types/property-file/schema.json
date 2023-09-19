@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "property_files",
+  "info": {
+    "singularName": "property-file",
+    "pluralName": "property-files",
+    "displayName": "Property File"
+  },
+  "options": {
+    "draftAndPublish": false,
+    "comment": ""
+  },
+  "attributes": {
+    "key": {
+      "type": "string"
+    }
+  }
+}
