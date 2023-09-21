@@ -1,9 +1,9 @@
 {
   "kind": "collectionType",
-  "collectionName": "property_files",
+  "collectionName": "properties",
   "info": {
-    "singularName": "property-file",
-    "pluralName": "property-files",
+    "singularName": "property",
+    "pluralName": "properties",
     "displayName": "Property File"
   },
   "options": {
@@ -12,6 +12,9 @@
   },
   "attributes": {
     "key": {
+      "type": "string"
+    },
+    "value":{
       "type": "string"
     }
   }

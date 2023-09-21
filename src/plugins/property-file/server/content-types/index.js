@@ -1,3 +1,6 @@
 'use strict';
 
-module.exports = {};
+const property = require('./property');
+module.exports = {
+    property
+};
