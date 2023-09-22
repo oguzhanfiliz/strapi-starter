@@ -17,6 +17,7 @@
     "@strapi/strapi": "4.11.4",
     "better-sqlite3": "8.0.1",
     "crypto": "^1.0.1",
+    "mysql": "^2.18.1",
     "nanoid": "^5.0.1",
     "pg": "^8.11.3",
     "pg-connection-string": "^2.6.2"

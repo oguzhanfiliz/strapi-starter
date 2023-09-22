@@ -7,17 +7,29 @@ import {
   Tr,
   Td,
   Th,
+// @ts-ignore
 } from "@strapi/design-system/Table";
+// @ts-ignore
 import { Box } from "@strapi/design-system/Box";
+// @ts-ignore
 import { Flex } from "@strapi/design-system/Flex";
+// @ts-ignore
 import { Button } from "@strapi/design-system/Button";
+// @ts-ignore
 import { Typography } from "@strapi/design-system/Typography";
+// @ts-ignore
 import { IconButton } from "@strapi/design-system/IconButton";
+// @ts-ignore
 import { VisuallyHidden } from "@strapi/design-system/VisuallyHidden";
+// @ts-ignore
 import { BaseCheckbox } from "@strapi/design-system/BaseCheckbox";
+// @ts-ignore
 import { TextInput } from "@strapi/design-system/TextInput";
+// @ts-ignore
 import Pencil from "@strapi/icons/Pencil";
+// @ts-ignore
 import Trash from "@strapi/icons/Trash";
+// @ts-ignore
 import Plus from "@strapi/icons/Plus";
 
 function PropertyCheckbox({ value, checkboxID, callback, disabled }) {
