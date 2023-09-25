@@ -32,6 +32,7 @@ import Trash from "@strapi/icons/Trash";
 // @ts-ignore
 import Plus from "@strapi/icons/Plus";
 
+
 function PropertyCheckbox({ value, checkboxID, callback, disabled }) {
   const [isChecked, setIsChecked] = useState(value);
 
@@ -107,7 +108,6 @@ export default function PropertyTable({
             </Th>
           </Tr>
         </Thead>
-        {console.log(propertyData)}
         <Tbody>
        
           {propertyData.map((property) => {
@@ -118,7 +118,7 @@ export default function PropertyTable({
             return (
               <Tr key={property.id}>
                 <Td>
-                  <Typography textColor="neutral800">{property.id}</Typography>
+                  <Typography textColor="neutral800">{property.key}</Typography>
                 </Td>
 
                 <Td>
@@ -128,7 +128,7 @@ export default function PropertyTable({
                       onChange={(e) => setInputValue(e.target.value)}
                     />
                   ) : (
-                    <Typography textColor="neutral800">{property.name}</Typography>
+                    <Typography textColor="neutral800">{property.value}</Typography>
                   )}
                 </Td>
 

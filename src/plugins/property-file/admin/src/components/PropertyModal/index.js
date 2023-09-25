@@ -10,26 +10,25 @@ import {
   TextInput,
 } from "@strapi/design-system";
 
-export default function PropertyModal({ setShowModal, addProperty }) {
-  const [name, setName] = useState("");
+export default function TodoModal({ showModal , onClose, onSubmit  }) {
+  const [inputKey, setInputKey] = useState("");
+  const [inputValue, setInputValue] = useState("");
 
   const handleSubmit = async (e) => {
-    // Prevent submitting parent form
     e.preventDefault();
     e.stopPropagation();
 
     try {
-      await addProperty({ name: name });
-      setShowModal(false);
+  
+      await onSubmit({ key: inputKey , value: inputValue , type: "add" });
+      onClose();
     } catch (e) {
       console.log("error", e);
     }
   };
 
   const getError = () => {
-    // Form validation error
-
-    if (name.length > 40) {
+    if (inputKey.length > 40) {
       return "Content is too long";
     }
 
@@ -37,38 +36,54 @@ export default function PropertyModal({ setShowModal, addProperty }) {
   };
 
   return (
-    <ModalLayout
-      onClose={() => setShowModal(false)}
+  <>
+  {showModal && <ModalLayout
+      onClose={() => onClose()}
       labelledBy="title"
       as="form"
       onSubmit={handleSubmit}
     >
       <ModalHeader>
         <Typography fontWeight="bold" textColor="neutral800" as="h2" id="title">
-          Property File
+          Add Data
         </Typography>
       </ModalHeader>
 
       <ModalBody>
+        <div className="col-md-6">
         <TextInput
-          placeholder="What do you need to do?"
-          label="Name"
-          name="text"
-          hint="Max 40 characters"
+          placeholder = "Please insert key"
+          name =  "text"
+          value= {inputKey}
+          onChange = {(e) => setInputKey(e.target.value)}
+          label="Key"
+          cssClass="mb-4"
           error={getError()}
-          onChange={(e) => setName(e.target.value)}
-          value={name}
         />
+</div>
+<div className="col-md-6">
+
+         <TextInput
+          placeholder = "Please insert value"
+          name =  "text"
+          value= {inputValue}
+          onChange = {(e) => setInputValue(e.target.value)}
+          label="Value"
+          error={getError()}
+        />
+</div>
+        
       </ModalBody>
 
       <ModalFooter
         startActions={
-          <Button onClick={() => setShowModal(false)} variant="tertiary">
+          <Button onClick={() => onClose(false)} variant="tertiary">
             Cancel
           </Button>
         }
-        endActions={<Button type="submit">Add Property</Button>}
+        endActions={<Button type="submit" onClick = {(e) => handleSubmit(e)}>Add Property</Button>}
       />
-    </ModalLayout>
+    </ModalLayout>}
+  </> 
   );
 }

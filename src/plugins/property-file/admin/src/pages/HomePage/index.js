@@ -16,20 +16,53 @@ const HomePage = () => {
   const [showModal, setShowModal] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
 
-  const fetchData = useCallback(async () => {
-    if (isLoading === false) setIsLoading(true);
-    const property = await propertyRequest.getAllData();
-    await setPropertyData(property);
-    await console.log(propertyData);
-    setIsLoading(false);
-  }, []);
+  
 
+  const fetchData = async (e) => {  
+    if (isLoading === false) setIsLoading(true);
+     // if e contains type
+      if (e && e.type === "add") {
+        await propertyRequest.addData(e.key, e.value);
+      }
+
+
+      const property = await propertyRequest.getAllData();
+      await setPropertyData(property);
+      setIsLoading(false);
+  }
+  
   useEffect(() => {
-    fetchData();
+    const initFetchData = async () => {
+      await fetchData();
+    };
+    setShowModal(false);
+
+    initFetchData();
   }, []);
+ 
+  async function addData(data) {
+    await propertyRequest.addData(data);
+    await fetchData();
+  }
+
+  async function toogleData(data) {
+    await propertyRequest.toogleData(data.id);
+  }
+
+  async function deleteData(data) {
+    await propertyRequest.deleteData(data.id);
+    await fetchData();
+  }
+
+  async function editTodo(id, data) {
+    await propertyRequest.editTodo(id, data);
+    await fetchData();
+  }
 
   return (
-    <Layout>
+    <
+// @ts-ignore
+    Layout>
       <BaseHeaderLayout title="Properties">
         <Button
           icon={<Plus />}
@@ -47,22 +80,24 @@ const HomePage = () => {
             primaryAction={
               <Button
                 label="Add Property"
-                onClick={() => setShowModal(true)}
+                onClick={() => setShowModal(false)}
               />
             }
             illo={<Illo />}
           />
         ) : (
+          // @ts-ignore
           <PropertyTable
           propertyData={propertyData}
+          setShowModal={setShowModal}
           />
         )}
       </ContentLayout>
-      <PropertyModal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-        onSubmit={() => fetchData()}
-      />
+            <PropertyModal
+            showModal={showModal}
+            onClose={setShowModal}
+            onSubmit={fetchData}
+          />
     </Layout>
   );
 };
