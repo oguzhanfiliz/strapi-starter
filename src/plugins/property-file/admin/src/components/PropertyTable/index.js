@@ -33,7 +33,6 @@ import Trash from "@strapi/icons/Trash";
 import Plus from "@strapi/icons/Plus";
 
 function PropertyCheckbox({ value, checkboxID, callback, disabled }) {
-    console.log("PropertyCheckbox", value);
   const [isChecked, setIsChecked] = useState(value);
 
   function handleChange() {
@@ -53,7 +52,6 @@ function PropertyCheckbox({ value, checkboxID, callback, disabled }) {
 }
 
 function PropertyInput({ value, onChange }) {
-    console.log("PropertyInput", value);
   return (
     <TextInput
       type="text"

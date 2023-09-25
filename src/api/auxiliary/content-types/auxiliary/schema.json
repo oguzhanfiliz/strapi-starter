@@ -1,0 +1,43 @@
+{
+  "kind": "collectionType",
+  "collectionName": "auxiliaries",
+  "info": {
+    "singularName": "auxiliary",
+    "pluralName": "auxiliaries",
+    "displayName": "Auxiliary"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "ssrCode": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
+    },
+    "ssrText": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
+    },
+    "ssrGroup": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
+    }
+  }
+}

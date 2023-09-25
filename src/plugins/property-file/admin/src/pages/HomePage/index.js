@@ -3,80 +3,68 @@
  * HomePage
  *
  */
-// import { Layout, BaseHeaderLayout,ContentLayout } from '@strapi/design-system/Layout';
-import React from 'react';
-// import PropTypes from 'prop-types';
+import React, { useEffect } from 'react';
 import pluginId from '../../pluginId';
+import { LoadingIndicatorPage } from '@strapi/helper-plugin';
+import propertyRequest from '../../api/property';
 import { nanoid } from 'nanoid';
-import { EmptyStateLayout,Button,Layout, BaseHeaderLayout,ContentLayout } from '@strapi/design-system';
+import { EmptyStateLayout, Button, Layout, BaseHeaderLayout, ContentLayout } from '@strapi/design-system';
 import Plus from '@strapi/icons/Plus';
+
 import { Illo } from '../../components/Illo';
 import PropertyModal from '../../components/PropertyModal';
 import PropertyTable from "../../components/PropertyTable";
+import { property } from '../../../../server/content-types';
 
 const HomePage = () => {
   const [propertyData, setPropertyData] = React.useState([]);
   const [showModal, setShowModal] = React.useState(false);
-  async function addProperty(data) {
-    setPropertyData([...propertyData, { ...data, id: nanoid(), isDone: false }]);
-  }
+  const [isLoading, setIsLoading] = React.useState(true);
 
-  async function toggleProperty(data) {
-    alert("Add Toggle Todo in API");
-  }
+  const fetchData = async () => {
+    if (isLoading === false) setIsLoading(true);
+    const property = await propertyRequest.getAllData();
+    setPropertyData(property);
+    setIsLoading(false);
+  };
 
-  async function deleteProperty(data) {
-    alert("Add Delete Todo in API");
-  }
-
-  async function editProperty(id, data) {
-    alert("Add Edit Todo in API");
-  }
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <Layout>
-      <BaseHeaderLayout
-      title = "Property File"
-      subtitle = "Manage your property file"
-      as = "h1"
-      />
-       <ContentLayout>
-    {
-      propertyData.length === 0 ? (
-        <EmptyStateLayout
-          content="You don't have any content yet..."
-          icon={<Illo />}
-          action={
-            <Button
-              onClick={() => {
-                setShowModal(true);
-              }}
-              variant="secondary"
-              startIcon={<Plus />}
-            >
-              Add your first content
-            </Button>
-          }
-          />
-      ) : (
-        <>
-
-        <PropertyTable
-          propertyData={propertyData}
-          setShowModal={setShowModal}
-          toggleProperty={toggleProperty}
-          deleteProperty={deleteProperty}
-          editProperty={editProperty}
+      <BaseHeaderLayout title="Properties">
+        <Button
+          icon={<Plus />}
+          label="Add Property"
+          onClick={() => setShowModal(true)}
         />
-      </>
-      )
-    }
-        </ContentLayout>
-        {showModal && (
-          <PropertyModal
-            setShowModal={setShowModal} addProperty={addProperty}
+      </BaseHeaderLayout>
+      <ContentLayout>
+        {isLoading ? (
+          <LoadingIndicatorPage />
+        ) : propertyData.length === 0 ? (
+          <EmptyStateLayout
+            title="No Properties Found"
+            description="Create a new property to get started."
+            primaryAction={
+              <Button
+                label="Add Property"
+                onClick={() => setShowModal(true)}
+              />
+            }
+            illo={<Illo />}
           />
+        ) : (
+          <PropertyTable data={propertyData} />
         )}
+      </ContentLayout>
+      <PropertyModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        onSubmit={() => fetchData()}
+      />
     </Layout>
   );
 };

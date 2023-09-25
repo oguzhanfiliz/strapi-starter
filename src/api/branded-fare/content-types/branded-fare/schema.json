@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "branded_fares",
+  "info": {
+    "singularName": "branded-fare",
+    "pluralName": "branded-fares",
+    "displayName": "Branded Fare"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "branded_fare_detail": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::branded-fare-detail.branded-fare-detail",
+      "inversedBy": "branded_fares"
+    }
+  }
+}

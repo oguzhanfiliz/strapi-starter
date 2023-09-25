@@ -1,0 +1,90 @@
+{
+  "kind": "collectionType",
+  "collectionName": "branded_fare_details",
+  "info": {
+    "singularName": "branded-fare-detail",
+    "pluralName": "branded-fare-details",
+    "displayName": "Branded Fare Details",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "Title": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string",
+      "required": true
+    },
+    "tableValue": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
+    },
+    "Value": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
+    },
+    "TableCode": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string"
+    },
+    "show_in_ibe_interface": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "boolean",
+      "default": false
+    },
+    "show_in_mobile_interface": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "boolean"
+    },
+    "deneme": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "enumeration",
+      "enum": [
+        "asdas",
+        "asdasdas1",
+        "asdasdas",
+        "denm"
+      ]
+    },
+    "branded_fares": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::branded-fare.branded-fare",
+      "mappedBy": "branded_fare_detail"
+    }
+  }
+}
