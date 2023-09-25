@@ -107,8 +107,9 @@ export default function PropertyTable({
             </Th>
           </Tr>
         </Thead>
-
+        {console.log(propertyData)}
         <Tbody>
+       
           {propertyData.map((property) => {
             const [inputValue, setInputValue] = useState(property.name);
 

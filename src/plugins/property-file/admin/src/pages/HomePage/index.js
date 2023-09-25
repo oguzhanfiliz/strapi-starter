@@ -1,13 +1,8 @@
-/*
- *
- * HomePage
- *
- */
-import React, { useEffect } from 'react';
+import React, { memo, useEffect, useCallback } from 'react';
 import pluginId from '../../pluginId';
-import { LoadingIndicatorPage } from '@strapi/helper-plugin';
-import propertyRequest from '../../api/property';
 import { nanoid } from 'nanoid';
+import { LoadingIndicatorPage } from "@strapi/helper-plugin";
+import propertyRequest from '../../api/property';
 import { EmptyStateLayout, Button, Layout, BaseHeaderLayout, ContentLayout } from '@strapi/design-system';
 import Plus from '@strapi/icons/Plus';
 
@@ -21,12 +16,13 @@ const HomePage = () => {
   const [showModal, setShowModal] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     if (isLoading === false) setIsLoading(true);
     const property = await propertyRequest.getAllData();
-    setPropertyData(property);
+    await setPropertyData(property);
+    await console.log(propertyData);
     setIsLoading(false);
-  };
+  }, []);
 
   useEffect(() => {
     fetchData();
@@ -57,7 +53,9 @@ const HomePage = () => {
             illo={<Illo />}
           />
         ) : (
-          <PropertyTable data={propertyData} />
+          <PropertyTable
+          propertyData={propertyData}
+          />
         )}
       </ContentLayout>
       <PropertyModal
@@ -69,4 +67,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default memo(HomePage);
