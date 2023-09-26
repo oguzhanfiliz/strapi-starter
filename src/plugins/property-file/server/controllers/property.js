@@ -11,7 +11,7 @@ module.exports = {
 
     async findNibe(ctx) {
       try{
-          return await strapi.plugin("property-file").service("property").find(ctx.query);
+          return await strapi.plugin("property-file").service("property").findNibe(ctx.query);
       }catch(err){
         ctx.throw(500, err);
       }
@@ -27,6 +27,7 @@ module.exports = {
     },
     async create(ctx)
     {
+      console.log("geldi",ctx.request.body);
       try {
         ctx.body = await strapi.plugin("property-file").service("property").create(ctx.request.body);
       } catch (err) {

@@ -26,7 +26,7 @@ module.exports = [
     },  
   },
     {
-    method: 'GET',
+    method: 'DELETE',
     path: '/delete/:id',
     handler: 'property.delete',
     config: {
@@ -44,7 +44,7 @@ module.exports = [
     },
   },
   {
-    method: 'POST',
+    method: 'PUT',
     path: '/update/:id',
     handler: 'property.update',
     config: {

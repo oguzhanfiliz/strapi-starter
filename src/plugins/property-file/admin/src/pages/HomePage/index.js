@@ -1,9 +1,11 @@
 import React, { memo, useEffect, useCallback } from 'react';
 import pluginId from '../../pluginId';
 import { nanoid } from 'nanoid';
+// @ts-ignore
 import { LoadingIndicatorPage } from "@strapi/helper-plugin";
 import propertyRequest from '../../api/property';
 import { EmptyStateLayout, Button, Layout, BaseHeaderLayout, ContentLayout } from '@strapi/design-system';
+// @ts-ignore
 import Plus from '@strapi/icons/Plus';
 
 import { Illo } from '../../components/Illo';
@@ -54,8 +56,9 @@ const HomePage = () => {
     await fetchData();
   }
 
-  async function editTodo(id, data) {
-    await propertyRequest.editTodo(id, data);
+  async function updateData(id, data) {
+    console.log("updateData", id, data);
+    await propertyRequest.updateData(id, data);
     await fetchData();
   }
 
@@ -90,6 +93,8 @@ const HomePage = () => {
           <PropertyTable
           propertyData={propertyData}
           setShowModal={setShowModal}
+          deleteProperty={deleteData}
+          editProperty={updateData}
           />
         )}
       </ContentLayout>

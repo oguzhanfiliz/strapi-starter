@@ -58,7 +58,7 @@ function PropertyInput({ value, onChange }) {
       type="text"
       aria-label="property-input"
       name="property-input"
-      error={value.length > 40 ? "Text should be less than 40 characters" : ""}
+      // error={value.length > 40 ? "Text should be less than 40 characters" : ""}
       onChange={onChange}
       value={value}
     />
@@ -111,7 +111,8 @@ export default function PropertyTable({
         <Tbody>
        
           {propertyData.map((property) => {
-            const [inputValue, setInputValue] = useState(property.name);
+            const [inputValue, setInputValue] = useState(property.value);
+            const [inputKey, setInputKey] = useState(property.key);
 
             const [isEdit, setIsEdit] = useState(false);
 
@@ -123,10 +124,16 @@ export default function PropertyTable({
 
                 <Td>
                   {isEdit ? (
+                    <>
                     <PropertyInput
-                      value={inputValue}
-                      onChange={(e) => setInputValue(e.target.value)}
-                    />
+                      value={inputKey}
+                      onChange={(e) => setInputKey(e.target.value)}
+                    />    
+                    <PropertyInput
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                  />   
+                  </>
                   ) : (
                     <Typography textColor="neutral800">{property.value}</Typography>
                   )}
@@ -145,7 +152,7 @@ export default function PropertyTable({
                   {isEdit ? (
                     <Flex style={{ justifyContent: "end" }}>
                       <Button
-                        onClick={() => editProperty(property.id, { name: inputValue })}
+                        onClick={() => editProperty(property.id, { key: inputKey, value: inputValue })}
                       >
                         Save
                       </Button>
