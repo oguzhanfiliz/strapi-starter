@@ -44,7 +44,7 @@ module.exports = [
     },
   },
   {
-    method: 'PUT',
+    method: 'POST',
     path: '/update/:id',
     handler: 'property.update',
     config: {

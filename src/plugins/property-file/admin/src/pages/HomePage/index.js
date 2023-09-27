@@ -57,8 +57,8 @@ const HomePage = () => {
   }
 
   async function updateData(id, data) {
-    console.log("updateData", id, data);
-    await propertyRequest.updateData(id, data);
+      console.log("index.js: ", data);
+    await propertyRequest.updateData(id, data.key, data.value);
     await fetchData();
   }
 

@@ -36,6 +36,7 @@ module.exports = {
     },
     async update(ctx)
     {
+      console.log("update.js",ctx.request.body);
       try {
         ctx.body = await strapi.plugin("property-file").service("property").update(ctx.params.id,ctx.request.body);
       } catch (err) {

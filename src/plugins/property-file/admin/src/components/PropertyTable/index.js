@@ -7,7 +7,7 @@ import {
   Tr,
   Td,
   Th,
-// @ts-ignore
+  // @ts-ignore
 } from "@strapi/design-system/Table";
 // @ts-ignore
 import { Box } from "@strapi/design-system/Box";
@@ -31,7 +31,25 @@ import Pencil from "@strapi/icons/Pencil";
 import Trash from "@strapi/icons/Trash";
 // @ts-ignore
 import Plus from "@strapi/icons/Plus";
-
+import {
+  Combobox,
+  ComboboxOption,
+  CreatableCombobox,
+} from "@strapi/design-system";
+import {
+  SingleSelect,
+  SingleSelectOption,
+  MultiSelect,
+  MultiSelectOption,
+  MultiSelectNested,
+  /**
+   * These imports are still valid, but will be removed in the
+   * next major iteration
+   */
+  Select,
+  Option,
+  OptGroup,
+} from "@strapi/design-system";
 
 function PropertyCheckbox({ value, checkboxID, callback, disabled }) {
   const [isChecked, setIsChecked] = useState(value);
@@ -64,6 +82,24 @@ function PropertyInput({ value, onChange }) {
     />
   );
 }
+function LanguageCombobox({ value, onChange }) {
+  console.log("value", value)
+  console.log("onChange", onChange)
+  return (
+    <SingleSelect
+            label="Language"
+            placeholder="Select Transalate language"
+            // onClear={() => {
+            //   setValue(undefined);
+            // }}
+            value={value}
+            onChange={onChange}
+          >
+            <SingleSelectOption value="en">English</SingleSelectOption>
+        
+          </SingleSelect>
+  );
+}
 
 export default function PropertyTable({
   propertyData,
@@ -80,6 +116,24 @@ export default function PropertyTable({
       padding={8}
       style={{ marginTop: "10px" }}
     >
+    
+      <div>
+        <Flex direction="column" alignItems="start" gap={11}>
+        {/* <LanguageCombobox
+        placeholder="English"
+        label="Language"
+        onChange={() => {value}}
+        /> */}
+
+
+    <SingleSelect label="Language" required placeholder="Language" hint="Select translate language" onChange = {(e) => {console.log(e)}} >
+          <SingleSelectOption selected value="en">English</SingleSelectOption>
+          <SingleSelectOption value="ru">Russian</SingleSelectOption>
+          <SingleSelectOption value="id">Indie</SingleSelectOption>
+    </SingleSelect>
+          <Flex gap={2} justifyContent="center"></Flex>
+        </Flex>
+      </div>
       <Table
         colCount={4}
         rowCount={10}
@@ -109,7 +163,6 @@ export default function PropertyTable({
           </Tr>
         </Thead>
         <Tbody>
-       
           {propertyData.map((property) => {
             const [inputValue, setInputValue] = useState(property.value);
             const [inputKey, setInputKey] = useState(property.key);
@@ -125,17 +178,19 @@ export default function PropertyTable({
                 <Td>
                   {isEdit ? (
                     <>
-                    <PropertyInput
-                      value={inputKey}
-                      onChange={(e) => setInputKey(e.target.value)}
-                    />    
-                    <PropertyInput
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                  />   
-                  </>
+                      <PropertyInput
+                        value={inputKey}
+                        onChange={(e) => setInputKey(e.target.value)}
+                      />
+                      <PropertyInput
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                      />
+                    </>
                   ) : (
-                    <Typography textColor="neutral800">{property.value}</Typography>
+                    <Typography textColor="neutral800">
+                      {property.value}
+                    </Typography>
                   )}
                 </Td>
 
@@ -152,7 +207,12 @@ export default function PropertyTable({
                   {isEdit ? (
                     <Flex style={{ justifyContent: "end" }}>
                       <Button
-                        onClick={() => editProperty(property.id, { key: inputKey, value: inputValue })}
+                        onClick={() =>
+                          editProperty(property.id, {
+                            key: inputKey,
+                            value: inputValue,
+                          })
+                        }
                       >
                         Save
                       </Button>
