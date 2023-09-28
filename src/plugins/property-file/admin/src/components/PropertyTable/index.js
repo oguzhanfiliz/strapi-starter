@@ -131,7 +131,7 @@ export default function PropertyTable({
           <SingleSelectOption value="ru">Russian</SingleSelectOption>
           <SingleSelectOption value="id">Indie</SingleSelectOption>
     </SingleSelect>
-          <Flex gap={2} justifyContent="center"></Flex>
+          <Flex gap={1} justifyContent="center"></Flex>
         </Flex>
       </div>
       <Table
