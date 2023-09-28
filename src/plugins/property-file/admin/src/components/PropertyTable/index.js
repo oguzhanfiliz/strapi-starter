@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   Thead,
@@ -50,6 +50,7 @@ import {
   Option,
   OptGroup,
 } from "@strapi/design-system";
+import axios from "axios";
 
 function PropertyCheckbox({ value, checkboxID, callback, disabled }) {
   const [isChecked, setIsChecked] = useState(value);
@@ -82,22 +83,57 @@ function PropertyInput({ value, onChange }) {
     />
   );
 }
+
+const getAllLanguages = () => {
+  return fetch("http://localhost:1337/api/i18n/locales")
+  .then((response) => response.json())
+  .then((data) => {
+    return data;
+  });
+};
+
+
+
 function LanguageCombobox({ value, onChange }) {
-  console.log("value", value)
-  console.log("onChange", onChange)
+  const [inputValue, setInputValue] = useState("en");
+  const [languages, setLanguages] = useState({});
+
+  useEffect(() => {
+    async function fetchLanguages() {
+      try {
+        const response = await axios.get("http://localhost:1337/api/i18n/locales");
+        const languageData = response.data;
+        // Transform the language data into the desired format, if needed
+        const formattedLanguages = languageData.reduce((acc, lang) => {
+          acc[lang.code] = lang.name;
+          return acc;
+        }, {});
+        setLanguages(formattedLanguages);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    fetchLanguages();
+  }, []);
+
+  function handleOnChange(event) {
+    // TODO Make the request to list the table in the selected language 
+    setInputValue(event);
+  }
+
   return (
     <SingleSelect
-            label="Language"
-            placeholder="Select Transalate language"
-            // onClear={() => {
-            //   setValue(undefined);
-            // }}
-            value={value}
-            onChange={onChange}
-          >
-            <SingleSelectOption value="en">English</SingleSelectOption>
-        
-          </SingleSelect>
+      selectButtonTitle={languages[value]}
+      label="Language"
+      placeholder="Select Translate language"
+      value={inputValue}
+      onChange={handleOnChange}
+    >
+      {Object.keys(languages).map((key) => (
+        <SingleSelectOption key={key} value={key}>{languages[key]}</SingleSelectOption>
+      ))}
+    </SingleSelect>
   );
 }
 
@@ -108,6 +144,8 @@ export default function PropertyTable({
   editProperty,
   setShowModal,
 }) {
+  const [selectedValue, setSelectedValue] = useState("en");
+
   return (
     <Box
       background="neutral0"
@@ -116,22 +154,13 @@ export default function PropertyTable({
       padding={8}
       style={{ marginTop: "10px" }}
     >
-    
       <div>
         <Flex direction="column" alignItems="start" gap={11}>
-        {/* <LanguageCombobox
-        placeholder="English"
-        label="Language"
-        onChange={() => {value}}
-        /> */}
-
-
-    <SingleSelect label="Language" required placeholder="Language" hint="Select translate language" onChange = {(e) => {console.log(e)}} >
-          <SingleSelectOption selected value="en">English</SingleSelectOption>
-          <SingleSelectOption value="ru">Russian</SingleSelectOption>
-          <SingleSelectOption value="id">Indie</SingleSelectOption>
-    </SingleSelect>
-          <Flex gap={1} justifyContent="center"></Flex>
+          <LanguageCombobox
+            value={selectedValue}
+            onChange={(value) => setSelectedValue(value)}
+          />
+          <Flex  justifyContent="center"></Flex>
         </Flex>
       </div>
       <Table
