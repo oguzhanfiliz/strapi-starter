@@ -28,7 +28,7 @@ const HomePage = () => {
       }
 
 
-      const property = await propertyRequest.getAllData();
+      const property = await propertyRequest.getAllData(e);
       await setPropertyData(property);
       setIsLoading(false);
   }
@@ -38,7 +38,6 @@ const HomePage = () => {
       await fetchData();
     };
     setShowModal(false);
-
     initFetchData();
   }, []);
  
@@ -73,21 +72,10 @@ const HomePage = () => {
           onClick={() => setShowModal(true)}
         />
       </BaseHeaderLayout>
+      {console.log(propertyData)}
       <ContentLayout>
         {isLoading ? (
           <LoadingIndicatorPage />
-        ) : propertyData.length === 0 ? (
-          <EmptyStateLayout
-            title="No Properties Found"
-            description="Create a new property to get started."
-            primaryAction={
-              <Button
-                label="Add Property"
-                onClick={() => setShowModal(false)}
-              />
-            }
-            illo={<Illo />}
-          />
         ) : (
           // @ts-ignore
           <PropertyTable
@@ -95,6 +83,7 @@ const HomePage = () => {
           setShowModal={setShowModal}
           deleteProperty={deleteData}
           editProperty={updateData}
+          changeLanguage={fetchData}
           />
         )}
       </ContentLayout>

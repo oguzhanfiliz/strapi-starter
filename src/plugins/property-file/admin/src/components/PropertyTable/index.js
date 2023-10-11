@@ -84,17 +84,7 @@ function PropertyInput({ value, onChange }) {
   );
 }
 
-const getAllLanguages = () => {
-  return fetch("http://localhost:1337/api/i18n/locales")
-  .then((response) => response.json())
-  .then((data) => {
-    return data;
-  });
-};
-
-
-
-function LanguageCombobox({ value, onChange }) {
+function LanguageCombobox({ value, onChange, changeLanguage }) {
   const [inputValue, setInputValue] = useState("en");
   const [languages, setLanguages] = useState({});
 
@@ -103,8 +93,19 @@ function LanguageCombobox({ value, onChange }) {
       try {
         const response = await axios.get("http://localhost:1337/api/i18n/locales");
         const languageData = response.data;
+        // Sıralama işlemi: isDefault true olanı seçili getir, diğerlerini sırala
+        const sortedLanguages = languageData.sort((a, b) => {
+          if (a.isDefault) return -1;
+          if (b.isDefault)
+          {
+            setInputValue(b.code);
+            return 1;
+          } 
+          return a.name.localeCompare(b.name);
+        });
         // Transform the language data into the desired format, if needed
-        const formattedLanguages = languageData.reduce((acc, lang) => {
+
+        const formattedLanguages = sortedLanguages.reduce((acc, lang) => {
           acc[lang.code] = lang.name;
           return acc;
         }, {});
@@ -120,6 +121,9 @@ function LanguageCombobox({ value, onChange }) {
   function handleOnChange(event) {
     // TODO Make the request to list the table in the selected language 
     setInputValue(event);
+    onChange(event); // `selectedValue` değerini `changeLanguage` propuna geçir
+    // Yeni dil değerini üst düzey bileşene iletmek için changeLanguage işlevini çağırın
+    changeLanguage(event);
   }
 
   return (
@@ -143,6 +147,7 @@ export default function PropertyTable({
   deleteProperty,
   editProperty,
   setShowModal,
+  changeLanguage
 }) {
   const [selectedValue, setSelectedValue] = useState("en");
 
@@ -158,9 +163,10 @@ export default function PropertyTable({
         <Flex direction="column" alignItems="start" gap={11}>
           <LanguageCombobox
             value={selectedValue}
-            onChange={(value) => setSelectedValue(value)}
+            onChange={setSelectedValue}
+            changeLanguage={changeLanguage}
           />
-          <Flex  justifyContent="center"></Flex>
+          <Flex justifyContent="center"></Flex>
         </Flex>
       </div>
       <Table
@@ -191,8 +197,15 @@ export default function PropertyTable({
             </Th>
           </Tr>
         </Thead>
+      
         <Tbody>
-          {propertyData.map((property) => {
+          {propertyData.length === 0 ? (
+            <Tr>
+              <Td>
+                <Typography textColor="neutral800">No data found</Typography>
+              </Td>
+            </Tr>
+          ) : (propertyData.map((property) => {
             const [inputValue, setInputValue] = useState(property.value);
             const [inputKey, setInputKey] = useState(property.key);
 
@@ -268,7 +281,7 @@ export default function PropertyTable({
                 </Td>
               </Tr>
             );
-          })}
+          }))}
         </Tbody>
       </Table>
     </Box>

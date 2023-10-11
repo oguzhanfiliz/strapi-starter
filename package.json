@@ -12,9 +12,9 @@
   "dependencies": {
     "@ckeditor/strapi-plugin-ckeditor": "^0.0.7",
     "@localazy/strapi-plugin": "^0.1.14",
-    "@strapi/plugin-i18n": "^4.14.0",
-    "@strapi/plugin-users-permissions": "4.14.0",
-    "@strapi/strapi": "4.14.0",
+    "@strapi/plugin-i18n": "^4.14.3",
+    "@strapi/plugin-users-permissions": "4.14.3",
+    "@strapi/strapi": "4.14.3",
     "axios": "^1.5.0",
     "better-sqlite3": "8.0.1",
     "bootstrap": "5.3.2",

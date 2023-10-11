@@ -1,7 +1,14 @@
 import axios from "axios";
 
 const propertyRequest = {
-  getAllData: async () => {
+  getAllData: async (e) => {
+    if(e !== undefined) {  
+
+      const response = await axios.get(
+        `http://localhost:1337/property-file/find?locale=${e}`
+      );
+      return response.data;
+    }
     const response = await axios.get(
       "http://localhost:1337/property-file/find"
     );
