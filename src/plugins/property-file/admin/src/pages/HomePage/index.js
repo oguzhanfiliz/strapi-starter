@@ -72,7 +72,6 @@ const HomePage = () => {
           onClick={() => setShowModal(true)}
         />
       </BaseHeaderLayout>
-      {console.log(propertyData)}
       <ContentLayout>
         {isLoading ? (
           <LoadingIndicatorPage />
