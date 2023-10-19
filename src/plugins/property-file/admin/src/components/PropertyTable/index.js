@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Table,
   Thead,
@@ -31,26 +31,8 @@ import Pencil from "@strapi/icons/Pencil";
 import Trash from "@strapi/icons/Trash";
 // @ts-ignore
 import Plus from "@strapi/icons/Plus";
-import {
-  Combobox,
-  ComboboxOption,
-  CreatableCombobox,
-} from "@strapi/design-system";
-import {
-  SingleSelect,
-  SingleSelectOption,
-  MultiSelect,
-  MultiSelectOption,
-  MultiSelectNested,
-  /**
-   * These imports are still valid, but will be removed in the
-   * next major iteration
-   */
-  Select,
-  Option,
-  OptGroup,
-} from "@strapi/design-system";
-import axios from "axios";
+import { LanguageCombobox } from "./LanguageCombobox";
+
 
 function PropertyCheckbox({ value, checkboxID, callback, disabled }) {
   const [isChecked, setIsChecked] = useState(value);
@@ -84,72 +66,16 @@ function PropertyInput({ value, onChange }) {
   );
 }
 
-function LanguageCombobox({ value, onChange, changeLanguage }) {
-  const [inputValue, setInputValue] = useState("en");
-  const [languages, setLanguages] = useState({});
-
-  useEffect(() => {
-    async function fetchLanguages() {
-      try {
-        const response = await axios.get("http://localhost:1337/api/i18n/locales");
-        const languageData = response.data;
-        // Sıralama işlemi: isDefault true olanı seçili getir, diğerlerini sırala
-        const sortedLanguages = languageData.sort((a, b) => {
-          if (a.isDefault) return -1;
-          if (b.isDefault)
-          {
-            setInputValue(b.code);
-            return 1;
-          } 
-          return a.name.localeCompare(b.name);
-        });
-        // Transform the language data into the desired format, if needed
-
-        const formattedLanguages = sortedLanguages.reduce((acc, lang) => {
-          acc[lang.code] = lang.name;
-          return acc;
-        }, {});
-        setLanguages(formattedLanguages);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    }
-
-    fetchLanguages();
-  }, []);
-
-  function handleOnChange(event) {
-    // TODO Make the request to list the table in the selected language 
-    setInputValue(event);
-    onChange(event); // `selectedValue` değerini `changeLanguage` propuna geçir
-    // Yeni dil değerini üst düzey bileşene iletmek için changeLanguage işlevini çağırın
-    changeLanguage(event);
-  }
-
-  return (
-    <SingleSelect
-      selectButtonTitle={languages[value]}
-      label="Language"
-      placeholder="Select Translate language"
-      value={inputValue}
-      onChange={handleOnChange}
-    >
-      {Object.keys(languages).map((key) => (
-        <SingleSelectOption key={key} value={key}>{languages[key]}</SingleSelectOption>
-      ))}
-    </SingleSelect>
-  );
-}
-
 export default function PropertyTable({
   propertyData,
   toggleProperty,
   deleteProperty,
   editProperty,
   setShowModal,
-  changeLanguage
+  changeLanguage,
+  languages,
+  selectedValue,
 }) {
-  const [selectedValue, setSelectedValue] = useState("en");
 
   return (
     <Box
@@ -163,8 +89,8 @@ export default function PropertyTable({
         <Flex direction="column" alignItems="start" gap={11}>
           <LanguageCombobox
             value={selectedValue}
-            onChange={setSelectedValue}
             changeLanguage={changeLanguage}
+            languages={languages}
           />
           <Flex justifyContent="center"></Flex>
         </Flex>

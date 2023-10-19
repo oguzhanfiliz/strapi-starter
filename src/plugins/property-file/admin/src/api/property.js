@@ -1,16 +1,17 @@
 import axios from "axios";
 
+const siteUrl = (window.location.origin === "http://localhost:8000") ? "http://localhost:1337" : window.location.origin; // for development mode not run 8000 port...
 const propertyRequest = {
   getAllData: async (e) => {
     if(e !== undefined) {  
 
       const response = await axios.get(
-        `http://localhost:1337/property-file/find?locale=${e}`
+        `${siteUrl}/property-file/find?locale=${e}`
       );
       return response.data;
     }
     const response = await axios.get(
-      "http://localhost:1337/property-file/find"
+      `${siteUrl}/property-file/find`
     );
     return response.data;
   },
@@ -20,7 +21,7 @@ const propertyRequest = {
       value,
     };
     const response = await axios.post(
-      "http://localhost:1337/property-file/create",
+      `${siteUrl}/property-file/create`,
       {
         data,
         headers: {
@@ -38,7 +39,7 @@ const propertyRequest = {
       value
     };
     const response = await axios.post(
-      `http://localhost:1337/property-file/update/${id}`,
+      `${siteUrl}/property-file/update/${id}`,
       {
         data,
       },
@@ -50,14 +51,14 @@ const propertyRequest = {
 
   deleteData: async (id) => {
     const response = await axios.delete(
-      `http://localhost:1337/property-file/delete/${id}`
+      `${siteUrl}/property-file/delete/${id}`
     );
     return response.data;
   },
 
   toogleData: async (id) => {
     const response = await axios.put(
-      `http://localhost:1337/property-file/toggle/${id}`
+      `${siteUrl}/property-file/toggle/${id}`
     );
     return response.data;
   },

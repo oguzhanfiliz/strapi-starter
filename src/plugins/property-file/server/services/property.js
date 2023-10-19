@@ -32,5 +32,5 @@ module.exports = ({strapi}) => ({
    {
       const result = await strapi.entityService.findOne("plugin::property-file.property",id);
       return await strapi.entityService.update("plugin::property-file.property",id,{value:!result.value});
-   }
+   },
 });

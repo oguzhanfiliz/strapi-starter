@@ -1,48 +1,75 @@
-import React, { memo, useEffect, useCallback } from 'react';
-import pluginId from '../../pluginId';
+import React, { memo, useEffect } from 'react';
+import axios from 'axios';
 import { nanoid } from 'nanoid';
-// @ts-ignore
+import pluginId from '../../pluginId';
 import { LoadingIndicatorPage } from "@strapi/helper-plugin";
-import propertyRequest from '../../api/property';
-import { EmptyStateLayout, Button, Layout, BaseHeaderLayout, ContentLayout } from '@strapi/design-system';
-// @ts-ignore
+import { BaseHeaderLayout, Button, ContentLayout, EmptyStateLayout, Layout } from '@strapi/design-system';
 import Plus from '@strapi/icons/Plus';
-
-import { Illo } from '../../components/Illo';
 import PropertyModal from '../../components/PropertyModal';
 import PropertyTable from "../../components/PropertyTable";
+import propertyRequest from '../../api/property';
 import { property } from '../../../../server/content-types';
+import { Illo } from '../../components/Illo';
 
 const HomePage = () => {
   const [propertyData, setPropertyData] = React.useState([]);
   const [showModal, setShowModal] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [languages, setLanguages] = React.useState({});
+  const [selectedValue, setSelectedValue] = React.useState();
 
-  
+  async function fetchLanguages() {
+    try {
+      const siteUrl = (window.location.origin === "http://localhost:8000") ? "http://localhost:1337" : window.location.origin; // for development mode not run 8000 port...
+      const response = await axios.get(`${siteUrl}/api/i18n/locales`);
+      const languageData = response.data;
+      const sortedLanguages = languageData.sort((a, b) => {
+        if (a.isDefault) {
+          setSelectedValue(a.code);
+          return -1;
+        }
+        if (b.isDefault) {
+          return 1;
+        }
+        return a.name.localeCompare(b.name);
+      });
 
-  const fetchData = async (e) => {  
-    if (isLoading === false) setIsLoading(true);
-     // if e contains type
-      if (e && e.type === "add") {
-        await propertyRequest.addData(e.key, e.value);
-      }
-
-
-      const property = await propertyRequest.getAllData(e);
-      await setPropertyData(property);
-      setIsLoading(false);
+      const formattedLanguages = sortedLanguages.reduce((acc, lang) => {
+        acc[lang.code] = lang.name;
+        return acc;
+      }, {});
+      await setLanguages(formattedLanguages);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   }
-  
+
+  async function fetchData(e) {
+    setIsLoading(true);
+
+    if (e && e.type === "add") {
+      await propertyRequest.addData(e.key, e.value);
+    }
+
+    if (!e) {
+      await fetchLanguages();
+    } else {
+      setSelectedValue(e);
+    }
+
+    const property = await propertyRequest.getAllData(e);
+    await setPropertyData(property);
+    setIsLoading(false);
+  }
+
   useEffect(() => {
-    const initFetchData = async () => {
-      await fetchData();
-    };
     setShowModal(false);
-    initFetchData();
+    fetchData();
   }, []);
- 
+
   async function addData(data) {
     await propertyRequest.addData(data);
+    console.log("index.js: ", data);
     await fetchData();
   }
 
@@ -56,15 +83,13 @@ const HomePage = () => {
   }
 
   async function updateData(id, data) {
-      console.log("index.js: ", data);
+    console.log("index.js: ", data);
     await propertyRequest.updateData(id, data.key, data.value);
     await fetchData();
   }
 
   return (
-    <
-// @ts-ignore
-    Layout>
+    <Layout>
       <BaseHeaderLayout title="Properties">
         <Button
           icon={<Plus />}
@@ -76,21 +101,22 @@ const HomePage = () => {
         {isLoading ? (
           <LoadingIndicatorPage />
         ) : (
-          // @ts-ignore
           <PropertyTable
-          propertyData={propertyData}
-          setShowModal={setShowModal}
-          deleteProperty={deleteData}
-          editProperty={updateData}
-          changeLanguage={fetchData}
+            propertyData={propertyData}
+            setShowModal={setShowModal}
+            deleteProperty={deleteData}
+            editProperty={updateData}
+            changeLanguage={fetchData}
+            languages={languages}
+            selectedValue={selectedValue}
           />
         )}
       </ContentLayout>
-            <PropertyModal
-            showModal={showModal}
-            onClose={setShowModal}
-            onSubmit={fetchData}
-          />
+      <PropertyModal
+        showModal={showModal}
+        onClose={setShowModal}
+        onSubmit={fetchData}
+      />
     </Layout>
   );
 };
